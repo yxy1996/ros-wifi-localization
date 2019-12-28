@@ -54,6 +54,5 @@ Please mail directly to
 
 ## Personal Usage
 
-1. ./test/ 存放使用的包、地图以及描绘 ground true 的轨迹的包
-2. 
+levmar-2.6包含了levmar库所需的头文件。
 
