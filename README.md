@@ -54,5 +54,6 @@ Please mail directly to
 
 ## Personal Usage
 
-levmar-2.6包含了levmar库所需的头文件。
+levmar-2.6包含了levmar库所需的头文件
+正常使用需要[sensormodel](https://github.com/yxy1996/wifi-localization)
 
