@@ -77,7 +77,8 @@ class RssLocalization():
         #Var initialization
         self.raw_rss    = list()
 
-        #subscribers 
+        # subscribers 
+        # apply to multi robot case
         eprint('Subscribing to '+self.ns+'rss')
         rospy.Subscriber(self.ns+'rss',RssData,self.callback_rss) 
 
@@ -98,25 +99,28 @@ class RssLocalization():
             #TODO: file_path = search for test      
             eprint('Loading model data')
             raw_rss,poses,tmp_odom = load_data(file_name=file_name) #odometry is not needed
-            traindata = ProcessedData(raw_rss,poses=poses,
-                                      filter_fuse_measurements=train_data_fuse)
+            traindata = ProcessedData(raw_rss,
+                                     poses=poses, filter_fuse_measurements=train_data_fuse)
             distance = np.sum(traindata.data['X'][1:]**2+traindata.data['X'][:-1]**2
                 -2*traindata.data['X'][1:]*traindata.data['X'][:-1],axis=1)**.5
             avg_distance = np.mean(distance)
 
             eprint('Number of measurements:        \t: ', traindata.nm)
-            eprint('Number of macs considered (all)\t: ', traindata.data['Y'].shape[1])
+            eprint('Number of macs considered (all)\t: ', traindata.data['Y'].shape[1])#each 'colomn' is a fingerprint corresponding to that position
             eprint('Average distance between points\t: ', np.round(avg_distance,2))        
 
             #Train model
             eprint('Training model')
             self.model = WifiGP(traindata.data,all_mac_dict=traindata.all_mac_dict)
             self.model.optimize()
+            # cross validation.
             eprint('Model trained successfully')
     
         self.loc_server = rospy.Service(self.ns+'loc_server', Localization, self.handle_loc)
 
         #Self localization at rate 1
+
+        # no use
         r = rospy.Rate(1)  #1Hz
         while not rospy.is_shutdown():
             r.sleep()

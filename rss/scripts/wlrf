@@ -10,7 +10,7 @@ import tf
 from std_msgs.msg import Float64MultiArray, Int32
 from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 from rss.msg import RssData
-from amcl.msg import ParticlesStats
+from rss.msg import ParticlesStats
 #ros services
 from rss.srv import Localization
 #personal libraries
@@ -95,7 +95,7 @@ class WLRF():
         eprint('Publishing to wifiweightsstats')
         self.pub_wifistats = rospy.Publisher('/wifiweightsstats',ParticlesStats,queue_size=1) 
 
-
+        # only in wlf2, the following codes works.
         if not self.global_localization:
             nparticles = Int32()
             nparticles.data = self.max_particles
@@ -105,7 +105,7 @@ class WLRF():
         r = rospy.Rate(1)
         counter = 0
         while not rospy.is_shutdown():
-            counter += 1
+            counter += 1  #count for what?
             r.sleep() #base_interval
 
     def callback_rss(self,rss):
@@ -138,6 +138,13 @@ class WLRF():
             eprint("Localization received")
 
         weights = np.asarray(loc.weights)
+
+        index = np.argmax(weights)
+        best_pose = PoseStamped()
+        best_pose.header = loc.pose_array.header
+        best_pose.pose   = loc.pose_array.poses[index]
+        self.pub_poseweighted.publish(best_pose)
+        
         self.publish_wifiweightsstats(weights,time_stamp)
         #eprint('max weights\t',np.max(weights))
         #eprint('avg weights\t',np.mean(weights))
@@ -163,8 +170,8 @@ class WLRF():
             time.sleep(.5)
             return False    
         
-        if debug:
-            eprint('Updating particles based on '+str(len(rss_copy))+' sensor readings')
+        
+        eprint('Updating particles based on '+str(len(rss_copy))+' sensor readings')
         
         #try:
         #get the likelihood of each particle in self.pose_array        

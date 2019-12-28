@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+from rss.msg import pointyxy, Params, FingerPrint
+from rss.srv import TrainData, TrainDataResponse
+
+import rospy
+import numpy as np
+from Localization.sensormodel.hybrid import hGP
+from rss.localization_server import loc_server_handle, loc_server_client
+
+class optimize_server():
+    def __init__(self):
+
+        self.opt_list = []
+
+        rospy.init_node('model_traning')  #ROS node init        
+        self.opt_server = rospy.Service('sensor_model_optimize', TrainData, self.handle_opt)
+        # self.loc_server = 
+        print "Ready to optimize"
+        r = rospy.Rate(1)  #1Hz
+        while not rospy.is_shutdown():
+            r.sleep()
+            #self_localize
+
+
+    def handle_opt(self,req):
+        traindata = dict()
+        X_bag = []
+        Y_bag = []
+
+        for i in range(len(req.Y)):
+            X = pointyxy()
+            Y = FingerPrint()
+
+            X=req.X[i]
+            Y=req.Y[i].rss
+
+            X_bag.append([X.x,X.y])
+            Y_bag.append(Y)
+
+        X_bag = np.array(X_bag)
+        Y_bag = np.array(Y_bag)
+
+        traindata['Y'] = Y_bag
+        traindata['X'] = X_bag
+
+        model = hGP(traindata)
+        model.optimize()
+
+        self.opt_list.append(model)
+
+
+        print(traindata['Y'])
+        print(traindata['X'])
+        
+        v = self.opt_list[0].pathloss.params
+        param = list()
+
+        p = Params()
+        for i in range(v.shape[0]):
+            p.k0 = v[i][0]
+            p.k1 = v[i][1]
+            p.px = v[i][2]
+            p.py = v[i][3]
+            param.append(p)
+
+        return [param]
+
+        # self.model = hGP(traindata)
+        # self.model.optimize()
+    # def handle_loc(self,req):
+    #     try:
+    #         loc = loc_server_handle(self.model,req.rss,req.nsamples,req.pose_array,ns=self.ns)
+    #         if loc is None: 
+    #             rospy.logerr('[handle_loc] Loc returned None')
+    #             return None
+    #     except:
+    #         e = sys.exc_info()[0]
+    #         rospy.logerr('[handle_loc] Localization failed: '+str(e))  
+    #         return None
+
+    #     loc[0].header.frame_id = self.ns+'map'
+    #     loc[0].header.seq = self.seq 
+    #     self.seq += 1
+
+    #     return loc
+    
+
+if __name__ == '__main__':
+    optimize = optimize_server()
+

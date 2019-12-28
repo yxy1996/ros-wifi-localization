@@ -11,7 +11,7 @@ Copy rss and tests to your catkin folder
     
     scp -r /tmp/ros-wifi/rss   ~/catkin_ws/src/rss
     scp -r /tmp/ros-wifi/tests ~/catkin_ws/src/tests
-  
+
 Rosbags for testing available at
 
     http://www.robot.t.u-tokyo.ac.jp/~miyagusuku/datasets
@@ -51,4 +51,9 @@ How to generate additional rosbags for testing global localization and the kidna
 Please mail directly to 
 
     miyagusuku at robot.t.u-tokyo.ac.jp
+
+## Personal Usage
+
+1. ./test/ 存放使用的包、地图以及描绘 ground true 的轨迹的包
+2. 
 

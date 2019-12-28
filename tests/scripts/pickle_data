@@ -66,7 +66,7 @@ if __name__ == '__main__':
     
     rospy.init_node('log_data',anonymous=True)  #ROS node init        
 
-    file_path = rospy.get_param('~save_file_path', '/home/renato/Desktop/')
+    file_path = rospy.get_param('~save_file_path', '/home/yxy/Desktop/')
     file_name = rospy.get_param('~save_file_name', '')
 
     eprint('Subscribing to rss')

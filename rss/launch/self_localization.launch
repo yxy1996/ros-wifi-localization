@@ -3,7 +3,7 @@
     <param name="use_sim_time" value="true" />
 
     <arg name="visualization"   default="true" />
-    <arg name="rosbag_rate"     default="1" />
+    <arg name="rosbag_rate"     default="4" />
     <arg name="bag_name"        default="b3test1"/>   
     <arg name="angle_var"       default="0.08"/>
     <arg name="distance_var"    default="0.05"/>
@@ -12,11 +12,11 @@
     <arg name="joint_kl"        default="0" />
     <arg name="joint_sgPoE"     default="0" />
 
-    <arg name="model_name"      default="gaussian" />
+    <arg name="model_name"      default="hybrid" />
     <arg name="min_particles"   default="1500" />
     <arg name="max_particles"   default="5000" />
 
-    <arg name="bag_path"        default="$(find tests)/bags/"/>
+    <arg name="bag_path"        default="/media/yxy/E4E8BAE1E8BAB0E2/englishPathBags/"/>
     <arg name="map_path"        default="$(find tests)/maps/"/>
     <arg name="map_name"        default="b3map"/> 
     

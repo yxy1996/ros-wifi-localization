@@ -10,7 +10,7 @@ import tf
 from std_msgs.msg import Float64MultiArray, Int32
 from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 from rss.msg import RssData
-from amcl.msg import ParticlesStats
+from rss.msg import ParticlesStats
 #ros services
 from rss.srv import Localization
 #personal libraries
@@ -164,6 +164,7 @@ class WLRF():
             eprint("Localization received")
 
         weights = np.asarray(loc.weights)
+
         if np.std(weights)>thr_std_w and self.wifi_sampling:
             rs_posearray, rs_w = resampling_wheel(loc.pose_array,weights,nsamples=weights.shape[0])
             
@@ -173,6 +174,11 @@ class WLRF():
             eprint('wifi resampling')
             self.wifi_sampling = False
 
+        index = np.argmax(weights)
+        best_pose = PoseStamped()
+        best_pose.header = loc.pose_array.header
+        best_pose.pose   = loc.pose_array.poses[index]
+        self.pub_poseweighted.publish(best_pose)
 
         self.publish_wifiweightsstats(weights,time_stamp)        
         #eprint('max weights\t',np.max(weights))
@@ -186,7 +192,7 @@ class WLRF():
         init = False     
         t0 = time.time()   
         while (not init):
-            eprint('Wifi initialization in progress')
+            print('Wifi initialization in progress')
             rss = copy.copy(self.raw_rss)
             init = self.wifiinit(nsamples,rss)
         eprint('initilization finished')
@@ -199,8 +205,7 @@ class WLRF():
             time.sleep(.5)
             return False    
         
-        if debug:
-            eprint('Updating particles based on '+str(len(rss_copy))+' sensor readings')
+        eprint('Updating particles based on '+str(len(rss_copy))+' sensor readings')
         
         #try:
         #get the likelihood of each particle in self.pose_array        

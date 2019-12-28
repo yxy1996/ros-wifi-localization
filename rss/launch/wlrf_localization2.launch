@@ -14,8 +14,8 @@
     <arg name="likelihood_metric_fun"  default="entropy_difference" />
     <arg name="likelihood_fixed_alpha" default="true" />
     <!--
-    <arg name="likelihood_eta"  default="/home/renato/Desktop/b3map_xopt_with_correlation2.p" />
-    <arg name="likelihood_CORR" default="/home/renato/Desktop/b3map_CORR2.p" />
+    <arg name="likelihood_eta"  default="/home/yxy/Desktop/b3map_xopt_with_correlation2.p" />
+    <arg name="likelihood_CORR" default="/home/yxy/Desktop/b3map_CORR2.p" />
     -->
 
     <!-- amcl parameters -->
@@ -32,15 +32,15 @@
     <arg name="min_particles"    default="100" />
     <arg name="max_particles"    default="5000" />
 
-    <arg name="bag_path"         default="$(find tests)/bags/krp/"/>
+    <arg name="bag_path"        default="/media/yxy/E4E8BAE1E8BAB0E2/englishPathBags/"/>
     <arg name="map_path"         default="$(find tests)/maps/"/>
     <arg name="bag_name"         default="b3test1"/>   
     <arg name="map_name"         default="b3map"/> 
-    <arg name="use_lrfmap"       default="false"/> 
+    <arg name="use_lrfmap"       default="False"/> 
     
     <arg name="train_data_name"  default="b3test1"/> 
     <arg name="train_data_fuse"  default="10"/>
-    <arg name="save_filepath"    default="/home/renato/Desktop/test results/wlrf-w"/> 
+    <arg name="save_filepath"    default="/home/yxy/Desktop/test results/wlrf-w"/> 
 
     <arg name="global_localization" default="False"/>
 

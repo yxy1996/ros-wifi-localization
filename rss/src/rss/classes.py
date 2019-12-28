@@ -51,7 +51,11 @@ class Measurement():
             rss_var
             rss_len
             transform2vector
+
+        yxy
+            only pose and its type are different from default setting up.
         """
+
         assert type(mdata) is RssData
 
         poses = kwargs.get('poses',None)
@@ -72,7 +76,7 @@ class Measurement():
         self.nap = len(mdata.mac_address)
         self.mac_dict = {mdata.mac_address[i]:i for i in np.arange(self.nap)}
         self.freq = list(mdata.freq)
-        self.rss  = [list(data.rss) for data in mdata.data]
+        self.rss  = [list(data.rss) for data in mdata.data] # wtf the rss is a list.
         
         #Filter
         self.filter_rss()
@@ -100,7 +104,7 @@ class Measurement():
         filter_factor       = kwargs.get('filter_rss_factor',self.filter_factor) #30% lower than mode
         min_repetition_flag = kwargs.get('min_repetition',self.min_repetition_flag)
         min_repetition_rss  = kwargs.get('min_repetition_rss',self.min_repetition_rss)
-        verbose = kwargs.get('verbose',False)    
+        verbose = kwargs.get('verbose',False)    # similar as getparam('',...50) , set the latter as default.
             
         self.filtered_rss   = list()
         
@@ -112,13 +116,13 @@ class Measurement():
             else:
                 unique_rss = list(set(rss)) #list of unique rss values 
                 count_rss = [rss.count(u_rss) for u_rss in unique_rss] # number of times each unique rss appears
-                # filter those that appearh less than factor times the mode
+                # filter those appear in low probability i.e. [-10,-10,-10,-10,-20,-30,-40] => [-10,*4];  add more -20 => [-20,-20,-10,*4]
                 mode_rss = np.max(count_rss)
                 filtered_rss = [r for r,c in zip(unique_rss,count_rss) for i in range(c) if c > filter_factor*mode_rss] 
             self.filtered_rss.append(filtered_rss)
             
 
-           
+             
     def find_pose(self,poses):
         """
         Given a ROS Trajectory message, incorporates x,y,angle position information
@@ -329,6 +333,7 @@ class Measurement():
 
 
 ############################################## PROCESSED DATA CLASS ##############################################
+# batch process thoughts
 class ProcessedData():
     def __init__(self,raw_measurements,**kwargs):
         """

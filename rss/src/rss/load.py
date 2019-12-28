@@ -11,11 +11,12 @@ def load_data(**kwargs):
     """
 
     file_name = kwargs.get('file_name','b3test1')
-    #TODO:change file path
+    #TODO:change f ile path
     file_path = kwargs.get('file_path',None)
     if file_path is None:
-        file_path=os.path.expanduser('~')+'/catkin_ws/src/tests/bags/processed_data/'
-    
+       # file_path=os.path.expanduser('~')+'/media/yxy/E4E8BAE1E8BAB0E2/englishPathBags/processed_data/'
+         file_path='/media/yxy/E4E8BAE1E8BAB0E2/englishPathBags/processed_data/'
+
     f=file_path+file_name
 
     try: 
@@ -48,7 +49,7 @@ def load_model(**kwargs):
     file_name = kwargs.get('file_name','b3_hgp')
     file_path = kwargs.get('file_path',None)
     if file_path is None:
-        file_path=os.path.expanduser('~')+'/catkin_ws/src/tests/bags/processed_data/'
+        file_path=os.path.expanduser('~')+'/wifi-rss/src/tests/bags/processed_data/'
 
     f=file_path+file_name+'.p'
 

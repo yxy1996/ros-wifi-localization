@@ -50,12 +50,17 @@ add_message_files(
   RssData.msg
   RssDatum.msg
   ProbArray.msg
-)
+  ParticlesStats.msg
+  pointyxy.msg
+  FingerPrint.msg
+  Params.msg
+) 
 
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
   Localization.srv
+  TrainData.srv
 )
 
 ## Generate actions in the 'action' folder
